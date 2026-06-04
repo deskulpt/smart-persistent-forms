@@ -134,7 +134,7 @@ initPersistentForms('.my-custom-form-class');
 
 ## 🤝 Contributing
 
-We love contributions! Feel free to open issues or submit pull requests. Let's make web forms frictionless for everyone.
+We love contributions at www.Deskulpt.ca ! Feel free to open issues or submit pull requests. Let's make web forms frictionless for everyone.
 
 ## 📄 License
 
