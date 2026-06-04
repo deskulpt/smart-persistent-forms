@@ -1,60 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Persistent Forms - Demo</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
   <div class="pf-container">
     <div class="pf-form-card">
       <div class="pf-form-header">
         <h2>Persistent Forms</h2>
-        <p>Fill out the fields. Refresh the page to see persistence. Click away from website/phone fields to see auto-formatting.</p>
+        <p>Fill out the fields. Refresh the page to see persistence. Click away from website/phone fields to see
+          auto-formatting.</p>
       </div>
 
-      <form onsubmit="event.preventDefault(); alert('Form submitted!');">
+      <form id="pf_main_form">
         <div class="pf-form-row">
           <div class="pf-form-field">
             <label for="first_name">First Name</label>
             <!-- Note: data-persist="true" tells our script to persist this input -->
-            <input type="text" id="first_name" name="first_name" class="pf-input" placeholder="Jane" data-persist="true" required>
+            <input type="text" id="first_name" name="first_name" class="pf-input" placeholder="Jane" data-persist="true"
+              required>
           </div>
           <div class="pf-form-field">
             <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" name="last_name" class="pf-input" placeholder="Doe" data-persist="true" required>
+            <input type="text" id="last_name" name="last_name" class="pf-input" placeholder="Doe" data-persist="true"
+              required>
+          </div>
+        </div>
+        <div class="pf-form-field">
+          <label for="phone">Phone Number</label>
+          <div class="pf-phone-wrapper">
+            <select id="country_code" class="pf-country-dropdown" aria-label="Country Code">
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input type="tel" id="phone" name="phone" class="pf-input pf-input-with-badge" placeholder="(555) 555-5555" data-persist="true">
+          </div>
+        </div>
+        <div class="pf-form-field pf-email-wrapper">
+          <label for="email">Email Address</label>
+          <div style="position: relative;">
+            <input type="text" id="email-suggestion" class="pf-input pf-email-ghost" disabled tabindex="-1">
+            <input type="email" id="email" name="email" class="pf-input pf-email-front" placeholder="john@example.com" required data-persist="true">
           </div>
         </div>
 
-        <div class="pf-form-field">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" class="pf-input" placeholder="jane@example.com" data-persist="true" required>
+        <div class="pf-form-row">
+          <div class="pf-form-field">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" class="pf-input" placeholder="San Francisco" data-persist="true">
+          </div>
+          <div class="pf-form-field">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" class="pf-input" placeholder="United States"
+              data-persist="true">
+          </div>
         </div>
 
-        <div class="pf-form-field">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" class="pf-input" placeholder="(555) 555-5555" data-persist="true">
-        </div>
+
 
         <div class="pf-form-field">
           <label for="website">Company Website</label>
-          <input type="url" id="website" name="website" class="pf-input" placeholder="https://example.com" data-persist="true">
+          <input type="url" id="website" name="website" class="pf-input" placeholder="https://example.com"
+            data-persist="true">
         </div>
 
-        <div class="pf-form-field">
+        <div class="pf-form-field pf-message-wrapper">
           <label for="message">Message</label>
-          <textarea id="message" name="message" class="pf-textarea" placeholder="How can we help you?" data-persist="true"></textarea>
+          <div style="position: relative;">
+            <textarea id="message" name="message" class="pf-textarea" placeholder="How can we help you?"
+              data-persist="true"></textarea>
+            <div class="pf-message-arrows">
+              <button type="button" id="msg-prev" class="pf-msg-arrow" aria-label="Previous message" title="Previous auto-message">◀</button>
+              <button type="button" id="msg-next" class="pf-msg-arrow" aria-label="Next message" title="Next auto-message">▶</button>
+            </div>
+          </div>
         </div>
 
+        <!-- Anti-Spam Rotation Captcha -->
+        <div class="pf-form-field">
+          <label>Anti-Spam Check: Rotate the image to be upright</label>
+          <div class="pf-rotate-captcha">
+            <div class="pf-rotate-image-container">
+              <img id="captcha-image" src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=150&h=150" alt="Rotate me">
+            </div>
+            <input type="range" id="captcha-slider" min="0" max="360" value="0" class="pf-input pf-range" aria-label="Rotate image">
+          </div>
+          <input type="hidden" id="captcha-valid" value="false">
+        </div>
+
+        <!-- Honeypot Field -->
+        <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1;" aria-hidden="true">
+          <label for="website_url_hp">Please leave this empty</label>
+          <input type="text" id="website_url_hp" name="website_url_hp" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="pf-checkbox-wrapper">
+          <input type="checkbox" id="marketing_opt_in" name="marketing_opt_in" data-persist="true" class="pf-checkbox">
+          <label for="marketing_opt_in">I agree to receive marketing communications and updates.</label>
+        </div>
+        
         <button type="submit" class="pf-btn-primary">Submit Form</button>
       </form>
     </div>
   </div>
 
-  <!-- Load the persistent forms script as a module -->
-  <script type="module" src="persistent-forms.js"></script>
+  <!-- Cookie Consent Banner -->
+  <div id="pf-cookie-banner" class="pf-cookie-banner" role="dialog" aria-live="polite" aria-labelledby="cookie-title" aria-describedby="cookie-desc" style="display: none;">
+    <div class="pf-cookie-content">
+      <h3 id="cookie-title">We value your privacy</h3>
+      <p id="cookie-desc">We use local storage for persistence and your IP address to intelligently autofill your location. Do you consent to IP detection?</p>
+    </div>
+    <div class="pf-cookie-actions">
+      <button id="pf-decline-cookies" class="pf-btn-secondary">Decline</button>
+      <button id="pf-accept-cookies" class="pf-btn-primary">Accept</button>
+    </div>
+  </div>
+
+  <!-- Load the persistent forms script -->
+  <script src="persistent-forms.js"></script>
 
 </body>
+
 </html>

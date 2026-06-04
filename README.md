@@ -8,7 +8,8 @@ Powered by a premium glassmorphism CSS UI based on the Deskulpt design system.
 
 1. **Input Persistence**: Never lose user input to a page refresh again. Inputs are synced to `localStorage` and automatically hydrated when the user returns.
 2. **Protocol Prefilling**: When users type a website domain (e.g. `example.com`), it is automatically prefixed with `https://` on blur, preventing invalid URL submission errors without annoying the user while typing.
-3. **Smart Phone Formatting**: 10 or 11 digit numbers are automatically formatted (e.g. `(555) 555-5555`) upon input blur.
+3. **Smart Phone Formatting**: Automatically detects North American area codes, strips country codes if provided in the dropdown, and formats the local number (e.g. `(555) 555-5555`) upon input blur.
+   - **The Heavy Option (Global Detection):** If you require accurate detection of local area codes for countries outside of North America, you can adopt [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It will accurately detect global area codes (like knowing `647` is Canada) and instantly swap the badge to the correct flag. However, note that this library contains a massive global database and will cause your script to take slightly longer to load.
 4. **Premium CSS UI**: A beautiful, dark-mode glassmorphism design system for modern web apps included out-of-the-box.
 
 ## Usage (Vanilla HTML)
