@@ -1,0 +1,169 @@
+/* ========================================================================
+   Persistent Forms - UI Styles
+   Beautiful, responsive, glassmorphism UI for forms. Powered by Deskulpt.
+   ======================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --pf-bg: #15121b;
+  --pf-bg-surface: #1c1825;
+  --pf-text: #e8dfee;
+  --pf-text-muted: #cfc8d8;
+  --pf-primary: #7c3aed;
+  --pf-primary-light: #8b5cf6;
+  --pf-secondary: #d946ef;
+  --pf-primary-glow: rgba(124, 58, 237, 0.45);
+  --pf-surface: rgba(255, 255, 255, 0.04);
+  --pf-surface-border: rgba(255, 255, 255, 0.08);
+  --pf-surface-hover: rgba(255, 255, 255, 0.07);
+  --pf-radius: 16px;
+  --pf-radius-sm: 10px;
+  --pf-font: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Base Body Styles for Demo - Can be removed in production */
+body {
+  background: var(--pf-bg);
+  color: var(--pf-text);
+  font-family: var(--pf-font);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Container */
+.pf-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Glassmorphism Form Card */
+.pf-form-card {
+  background: var(--pf-surface);
+  border: 1px solid var(--pf-surface-border);
+  border-radius: var(--pf-radius);
+  padding: 3rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-form-card:hover {
+  background: var(--pf-surface-hover);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+}
+
+.pf-form-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.pf-form-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--pf-primary-light), var(--pf-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pf-form-header p {
+  color: var(--pf-text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Form Fields */
+.pf-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.pf-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pf-form-field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--pf-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.pf-input, .pf-textarea {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--pf-surface-border);
+  border-radius: var(--pf-radius-sm);
+  color: var(--pf-text);
+  padding: 0.85rem 1.1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pf-input::placeholder, .pf-textarea::placeholder {
+  color: rgba(157, 147, 171, 0.5);
+}
+
+.pf-input:focus, .pf-textarea:focus {
+  border-color: var(--pf-primary-light);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.pf-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Button */
+.pf-btn-primary {
+  background: linear-gradient(135deg, var(--pf-primary-light), var(--pf-secondary));
+  color: #fff;
+  padding: 1rem 2.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.pf-btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 30px var(--pf-primary-glow), 0 0 60px rgba(124, 58, 237, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .pf-form-row {
+    grid-template-columns: 1fr;
+  }
+  .pf-form-card {
+    padding: 2rem 1.5rem;
+  }
+}

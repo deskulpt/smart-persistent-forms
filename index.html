@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persistent Forms - Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="pf-container">
+    <div class="pf-form-card">
+      <div class="pf-form-header">
+        <h2>Persistent Forms</h2>
+        <p>Fill out the fields. Refresh the page to see persistence. Click away from website/phone fields to see auto-formatting.</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); alert('Form submitted!');">
+        <div class="pf-form-row">
+          <div class="pf-form-field">
+            <label for="first_name">First Name</label>
+            <!-- Note: data-persist="true" tells our script to persist this input -->
+            <input type="text" id="first_name" name="first_name" class="pf-input" placeholder="Jane" data-persist="true" required>
+          </div>
+          <div class="pf-form-field">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" class="pf-input" placeholder="Doe" data-persist="true" required>
+          </div>
+        </div>
+
+        <div class="pf-form-field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="pf-input" placeholder="jane@example.com" data-persist="true" required>
+        </div>
+
+        <div class="pf-form-field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="pf-input" placeholder="(555) 555-5555" data-persist="true">
+        </div>
+
+        <div class="pf-form-field">
+          <label for="website">Company Website</label>
+          <input type="url" id="website" name="website" class="pf-input" placeholder="https://example.com" data-persist="true">
+        </div>
+
+        <div class="pf-form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" class="pf-textarea" placeholder="How can we help you?" data-persist="true"></textarea>
+        </div>
+
+        <button type="submit" class="pf-btn-primary">Submit Form</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Load the persistent forms script as a module -->
+  <script type="module" src="persistent-forms.js"></script>
+
+</body>
+</html>
