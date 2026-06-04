@@ -378,6 +378,35 @@ async function populateCountryDropdown() {
       }
     });
 
+    // Custom Keystroke semantic search to bypass emoji-first native select behavior
+    let searchString = '';
+    let searchTimeout;
+
+    dropdown.addEventListener('keydown', (e) => {
+      // Ignore non-printable keys
+      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+      
+      e.preventDefault(); // prevent native select behavior
+      
+      searchString += e.key.toLowerCase();
+      
+      // Reset search string after 800ms of inactivity
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchString = '';
+      }, 800);
+
+      // Find first matching option by semantic country name
+      for (let i = 0; i < dropdown.options.length; i++) {
+        const opt = dropdown.options[i];
+        if (opt.dataset.name && opt.dataset.name.toLowerCase().startsWith(searchString)) {
+          dropdown.selectedIndex = i;
+          dropdown.dispatchEvent(new Event('change', { bubbles: true }));
+          break;
+        }
+      }
+    });
+
     // Trigger initial resize
     dropdown.dispatchEvent(new Event('change', { bubbles: true }));
 
