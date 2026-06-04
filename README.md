@@ -1,42 +1,72 @@
-# Persistent Forms
+<div align="center">
+  <h1>✨ Smart Persistent Forms</h1>
+  <p><strong>A zero-dependency, plug-and-play Vanilla JS library for frictionless, resilient web forms.</strong></p>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  [![Vanilla JS](https://img.shields.io/badge/Vanilla-JS-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+  [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)](#)
+  [![Size: Lightweight](https://img.shields.io/badge/Size-Lightweight-brightgreen.svg)](#)
+</div>
 
-A lightweight, zero-dependency vanilla JavaScript library for frictionless web forms. It automatically handles form persistence (saving to `localStorage` to survive page refreshes), smart URL prefilling, and non-intrusive phone number formatting.
+<hr/>
 
-Powered by a premium glassmorphism CSS UI based on the Deskulpt design system.
+## 🚀 Why Smart Persistent Forms?
 
-## Features & Benefits
+Have you ever filled out a long form, accidentally closed the tab, and lost everything? **Smart Persistent Forms** solves this out-of-the-box. It brings enterprise-grade form features to any website with literally zero configuration. 
+
+Just drop in the script, add `data-persist="true"` to your inputs, and you instantly get local data persistence, smart URL formatting, and intelligent phone number styling.
+
+## ✨ Features & Benefits
 
 | Feature | Advantage | Benefit | Plug & Play Instructions |
 | :--- | :--- | :--- | :--- |
-| **Input Persistence** | Saves form data directly to the user's browser `localStorage` in real-time. | Users never lose their typed information if they accidentally close the tab, refresh the page, or navigate away. | Add `data-persist="true"` to any `<input>`, `<textarea>`, or `<select>`. The script handles the rest automatically. |
-| **Protocol Prefilling** | Automatically prepends `https://` to URLs upon input blur, avoiding typing disruptions. | Prevents form submission errors for invalid URLs without annoying the user while they are actively typing. | Use `<input type="url">` and add the `data-persist="true"` attribute. |
-| **Smart Phone Formatting** | Detects and formats North American phone numbers to the standard `(555) 555-5555` format. | Ensures clean, standardized data in your backend while providing a polished experience for the user. | Use `<input type="tel">` and add the `data-persist="true"` attribute. |
-| **Phone Geolocation** | Integrates with IP geolocation to auto-detect the user's country and updates the country code badge. | Reduces friction by pre-selecting the correct country prefix based on the user's IP address. | Include an element with `id="country-badge"` next to your phone input. It updates automatically. |
-| **Premium CSS UI** | Ready-to-use glassmorphism styling based on the premium Deskulpt design system. | Saves hours of styling time and provides a modern, cohesive look and feel out of the box. | Include `styles.css` and use the `.pf-input` class on your form elements. |
+| **💾 Input Persistence** | Saves form data directly to the user's browser `localStorage` in real-time. | Users never lose their typed information if they accidentally close the tab, refresh the page, or navigate away. | Add `data-persist="true"` to any `<input>`, `<textarea>`, or `<select>`. |
+| **🌐 Protocol Prefilling** | Automatically prepends `https://` to URLs upon input blur. | Prevents form submission errors for invalid URLs without disrupting the user while they are actively typing. | Use `<input type="url" data-persist="true">`. |
+| **📞 Smart Phone Formatting** | Detects and formats North American phone numbers to the standard `(555) 555-5555`. | Ensures clean, standardized data in your backend while providing a polished experience for the user. | Use `<input type="tel" data-persist="true">`. |
+| **🌍 Phone Geolocation** | Integrates with IP geolocation to auto-detect the user's country code. | Reduces friction by pre-selecting the correct country prefix based on the user's location. | Include an element with `id="country-badge"` next to your phone input. |
+| **💅 Premium CSS UI** | Ready-to-use glassmorphism styling based on the premium Deskulpt design system. | Saves hours of CSS tweaking and provides a modern, cohesive look right out of the box. | Include `styles.css` and add the `.pf-input` class to your elements. |
 
-*Note on Global Phone Formatting:* If you require accurate detection of local area codes for countries outside of North America, you can adopt [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It accurately detects global area codes and instantly swaps the badge to the correct flag. However, note that this library contains a massive global database and will increase load times.
+> **Note on Global Phone Formatting:** For accurate detection of local area codes *outside* North America, you can integrate [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It provides massive global coverage but comes with an increased bundle size.
 
-## Usage (Vanilla HTML)
+---
 
-1. Include the `styles.css` in your `<head>`.
-2. Add the `data-persist="true"` attribute to any `<input>`, `<textarea>`, or `<select>` you want to bind. Make sure the input has a `name` or `id` attribute.
-3. Include `persistent-forms.js` at the bottom of your body.
+## 📦 Quick Start (Vanilla HTML)
 
+**1. Include the Styles**  
+Drop the beautiful glassmorphism CSS into your `<head>`:
 ```html
 <link rel="stylesheet" href="styles.css">
+```
 
-<!-- Your form -->
-<input type="text" id="first_name" name="first_name" class="pf-input" data-persist="true">
-<input type="tel" name="phone" class="pf-input" data-persist="true">
-<input type="url" name="website" class="pf-input" data-persist="true">
+**2. Markup Your Form**  
+Add the `data-persist="true"` attribute to any input you want to supercharge. Make sure they have a `name` or `id`!
+```html
+<form>
+  <!-- Basic text input with persistence -->
+  <input type="text" name="first_name" class="pf-input" data-persist="true" placeholder="First Name">
+  
+  <!-- URL input gets auto https:// protocol -->
+  <input type="url" name="website" class="pf-input" data-persist="true" placeholder="example.com">
+  
+  <!-- Phone input gets formatting and geolocation -->
+  <div class="pf-phone-wrapper">
+    <span id="country-badge">🇺🇸 +1</span>
+    <input type="tel" name="phone" class="pf-input" data-persist="true" placeholder="(555) 555-5555">
+  </div>
+</form>
+```
 
-<!-- Script inclusion -->
+**3. Include the Script**  
+Add the script just before your closing `</body>` tag:
+```html
 <script type="module" src="persistent-forms.js"></script>
 ```
 
-## Usage (React / Next.js)
+---
 
-You can import the core functions into your React application to handle state and persistence safely without causing Hydration mismatches.
+## ⚛️ Usage with React / Next.js
+
+Using React? You can import the core functions directly to handle state safely without causing Hydration mismatches.
 
 ```tsx
 import { useEffect, useState } from 'react';
@@ -45,7 +75,7 @@ import { formatUrlPrefix, autoCorrectPhone } from './persistent-forms';
 export default function ContactForm() {
   const [formData, setFormData] = useState({ name: '', phone: '', website: '' });
 
-  // 1. Hydrate safely on mount
+  // 1. Hydrate safely on mount (client-side only)
   useEffect(() => {
     setFormData({
       name: localStorage.getItem('pf_user_name') || '',
@@ -54,14 +84,14 @@ export default function ContactForm() {
     });
   }, []);
 
-  // 2. Handle changes
+  // 2. Handle real-time changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     localStorage.setItem(`pf_user_${name}`, value);
   };
 
-  // 3. Handle formatting on blur
+  // 3. Handle smart formatting on blur
   const handleBlur = (e) => {
     const { name, value } = e.target;
     let formatted = value;
@@ -81,18 +111,32 @@ export default function ContactForm() {
       value={formData.phone}
       onChange={handleChange}
       onBlur={handleBlur}
+      className="pf-input"
     />
   );
 }
 ```
 
-## Custom Initialization
+---
 
-If you don't want to use `data-persist="true"`, you can manually initialize the library by passing a CSS selector:
+## 🛠 Advanced Initialization
+
+Don't want to use data attributes? You can initialize the library manually by passing your own CSS selector:
 
 ```javascript
 import { initPersistentForms } from './persistent-forms.js';
 
-// Bind to specific classes
-initPersistentForms('.my-form-inputs');
+// Bind persistence to any custom class or element
+initPersistentForms('.my-custom-form-class');
 ```
+
+---
+
+## 🤝 Contributing
+
+We love contributions! Feel free to open issues or submit pull requests. Let's make web forms frictionless for everyone.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
