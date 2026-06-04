@@ -20,6 +20,9 @@ Sure, your AI might casually generate bare-bones HTML forms, or you could pay a 
 
 Just drop in the script, add `data-persist="true"` to your inputs, and you instantly get local data persistence, smart URL formatting, and intelligent phone number styling.
 
+<img width="421" height="899" alt="image" src="https://github.com/user-attachments/assets/a606a2d9-fa76-4152-b8f5-5e1c304573a7" />
+
+
 ## ✨ Features Optimized for CRO (Conversion Rate Optimization)
 
 Every millisecond of friction costs you leads and sales. We built this form engine specifically to eliminate the invisible barriers that cause users to abandon forms.
