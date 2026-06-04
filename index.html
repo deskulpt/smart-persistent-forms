@@ -35,10 +35,15 @@
         <div class="pf-form-field">
           <label for="phone">Phone Number</label>
           <div class="pf-phone-wrapper">
-            <select id="country_code" class="pf-country-dropdown" aria-label="Country Code">
-              <option value="+1">🇺🇸 +1</option>
-            </select>
-            <input type="tel" id="phone" name="phone" class="pf-input pf-input-with-badge" placeholder="(555) 555-5555" data-persist="true">
+            <div class="pf-custom-select" id="pf-country-select" tabindex="0">
+              <div class="pf-select-trigger" id="pf-country-trigger">🇺🇸 +1</div>
+              <div class="pf-select-dropdown">
+                <input type="text" class="pf-select-search" id="pf-country-search" placeholder="Search country..." aria-label="Search country" autocomplete="off">
+                <ul class="pf-select-list" id="country_code_list"></ul>
+              </div>
+            </div>
+            <input type="hidden" id="country_code_hidden" name="country_code" value="+1" data-cca2="US">
+            <input type="tel" id="phone" name="phone" inputmode="tel" class="pf-input pf-input-with-badge" placeholder="(555) 555-5555" data-persist="true">
           </div>
         </div>
         <div class="pf-form-field pf-email-wrapper">

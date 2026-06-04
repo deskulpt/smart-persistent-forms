@@ -46,6 +46,16 @@ function initPersistentForms(selector = 'input, textarea, select') {
       }
     }
 
+    // 1.5 Real-time phone input validation
+    if (input.type === 'tel' || key.toLowerCase().includes('phone') || key.toLowerCase().includes('tel')) {
+      input.addEventListener('input', (e) => {
+        const cleaned = e.target.value.replace(/[^\d\+\-\(\)\s]/g, '');
+        if (e.target.value !== cleaned) {
+           e.target.value = cleaned;
+        }
+      });
+    }
+
     // 2. Cross-Form Synchronization (Save on input/change)
     const saveValue = (e) => {
       const val = e.target.type === 'checkbox' ? e.target.checked.toString() : e.target.value;
@@ -299,8 +309,13 @@ async function autoDetectLocation() {
  * Fetch country codes and populate the dropdown badge
  */
 async function populateCountryDropdown() {
-  const dropdown = document.getElementById('country_code');
-  if (!dropdown) return;
+  const customSelect = document.getElementById('pf-country-select');
+  const trigger = document.getElementById('pf-country-trigger');
+  const searchInput = document.getElementById('pf-country-search');
+  const listContainer = document.getElementById('country_code_list');
+  const hiddenInput = document.getElementById('country_code_hidden');
+  
+  if (!customSelect || !listContainer) return;
   
   try {
     const res = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,flag,cca2');
@@ -320,39 +335,40 @@ async function populateCountryDropdown() {
     
     options.sort((a, b) => a.name.localeCompare(b.name));
     
-    const lastUsedCca2 = localStorage.getItem('pf_last_country_cca2');
-    let lastUsedOpt = lastUsedCca2 ? options.find(o => o.cca2 === lastUsedCca2) : null;
-    
-    dropdown.innerHTML = '';
-    
-    if (lastUsedOpt) {
-      const opt = new Option(`${lastUsedOpt.flag} ${lastUsedOpt.code}`, lastUsedOpt.code);
-      opt.dataset.cca2 = lastUsedOpt.cca2;
-      opt.dataset.name = lastUsedOpt.name;
-      dropdown.add(opt);
-      dropdown.add(new Option('---', '', false, false));
-      dropdown.options[1].disabled = true;
-    } else {
-      // Default to +1 if no last used
-      const usOpt = options.find(o => o.cca2 === 'US');
-      if (usOpt) {
-         const opt = new Option(`${usOpt.flag} ${usOpt.code}`, usOpt.code);
-         opt.dataset.cca2 = usOpt.cca2;
-         opt.dataset.name = usOpt.name;
-         dropdown.add(opt);
-         dropdown.add(new Option('---', '', false, false));
-         dropdown.options[1].disabled = true;
-      }
-    }
-    
+    listContainer.innerHTML = '';
     const dataList = document.getElementById('pf_country_list');
     if (dataList) dataList.innerHTML = '';
 
+    const updateTriggerAndHidden = (o) => {
+       trigger.innerText = `${o.flag} ${o.code}`;
+       hiddenInput.value = o.code;
+       hiddenInput.dataset.cca2 = o.cca2;
+       localStorage.setItem('pf_last_country_cca2', o.cca2);
+       
+       const countryInput = document.getElementById('country') || document.querySelector('input[name="country"]');
+       if (countryInput) {
+          countryInput.value = o.name;
+          countryInput.dispatchEvent(new Event('input', { bubbles: true }));
+       }
+    };
+
+    let allLiElements = [];
+
     options.forEach(o => {
-      const opt = new Option(`${o.flag} ${o.code} (${o.name})`, o.code);
-      opt.dataset.cca2 = o.cca2;
-      opt.dataset.name = o.name;
-      dropdown.add(opt);
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${o.flag}</span> <span>${o.name}</span> <span style="color:var(--pf-text-muted); margin-left:auto;">${o.code}</span>`;
+      li.dataset.name = o.name.toLowerCase();
+      li.dataset.cca2 = o.cca2;
+      li.dataset.code = o.code;
+      li.dataset.flag = o.flag;
+      li.dataset.rawname = o.name;
+      
+      li.addEventListener('click', () => {
+         updateTriggerAndHidden(o);
+         customSelect.classList.remove('pf-open');
+      });
+      listContainer.appendChild(li);
+      allLiElements.push(li);
 
       if (dataList) {
         const dlOpt = document.createElement('option');
@@ -361,54 +377,62 @@ async function populateCountryDropdown() {
       }
     });
 
-    dropdown.addEventListener('change', (e) => {
-      const selectedOpt = dropdown.options[dropdown.selectedIndex];
-      if (selectedOpt && selectedOpt.dataset.cca2) {
-         localStorage.setItem('pf_last_country_cca2', selectedOpt.dataset.cca2);
-         // Update Country field value dynamically
-         const countryInput = document.getElementById('country') || document.querySelector('input[name="country"]');
-         if (countryInput) {
-            countryInput.value = selectedOpt.dataset.name;
-            countryInput.dispatchEvent(new Event('input', { bubbles: true }));
-         }
-         
-         // Dynamically shrink/grow the dropdown to match the selected text length
-         const textLen = selectedOpt.text.length;
-         dropdown.style.width = `calc(${textLen}ch + 1.25rem)`;
+    const lastUsedCca2 = localStorage.getItem('pf_last_country_cca2');
+    const defaultOpt = (lastUsedCca2 ? options.find(o => o.cca2 === lastUsedCca2) : null) || options.find(o => o.cca2 === 'US') || options[0];
+    
+    if (defaultOpt) {
+       updateTriggerAndHidden(defaultOpt);
+    }
+
+    // Toggle dropdown
+    trigger.addEventListener('click', () => {
+      customSelect.classList.toggle('pf-open');
+      if (customSelect.classList.contains('pf-open')) {
+         searchInput.value = '';
+         searchInput.focus();
+         allLiElements.forEach(li => li.style.display = 'flex');
       }
     });
 
-    // Custom Keystroke semantic search to bypass emoji-first native select behavior
-    let searchString = '';
-    let searchTimeout;
-
-    dropdown.addEventListener('keydown', (e) => {
-      // Ignore non-printable keys
-      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
-      
-      e.preventDefault(); // prevent native select behavior
-      
-      searchString += e.key.toLowerCase();
-      
-      // Reset search string after 800ms of inactivity
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        searchString = '';
-      }, 800);
-
-      // Find first matching option by semantic country name
-      for (let i = 0; i < dropdown.options.length; i++) {
-        const opt = dropdown.options[i];
-        if (opt.dataset.name && opt.dataset.name.toLowerCase().startsWith(searchString)) {
-          dropdown.selectedIndex = i;
-          dropdown.dispatchEvent(new Event('change', { bubbles: true }));
-          break;
-        }
-      }
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+       if (!customSelect.contains(e.target)) {
+          customSelect.classList.remove('pf-open');
+       }
     });
 
-    // Trigger initial resize
-    dropdown.dispatchEvent(new Event('change', { bubbles: true }));
+    // Search filter to shorten list natively
+    searchInput.addEventListener('input', (e) => {
+       const term = e.target.value.toLowerCase().trim();
+       allLiElements.forEach(li => {
+          if (!term) {
+             li.style.display = 'flex';
+             return;
+          }
+          const isPlus = term.startsWith('+');
+          const matchCode = li.dataset.code.includes(term);
+          const matchName = li.dataset.name.includes(term);
+          
+          if (isPlus ? matchCode : matchName) {
+             li.style.display = 'flex';
+          } else {
+             li.style.display = 'none';
+          }
+       });
+    });
+
+    // Keyboard support for custom select
+    customSelect.addEventListener('keydown', (e) => {
+       if (e.key === 'Enter' || e.key === ' ') {
+          if (!customSelect.classList.contains('pf-open')) {
+             e.preventDefault();
+             trigger.click();
+          }
+       } else if (e.key === 'Escape') {
+          customSelect.classList.remove('pf-open');
+          customSelect.focus();
+       }
+    });
 
   } catch (e) {
     console.error('Failed to populate dropdown', e);
@@ -467,18 +491,27 @@ const CANADIAN_AREA_CODES = ["204", "226", "236", "249", "250", "263", "289", "3
  */
 function formatPhoneAndSyncDropdown(value) {
   let digits = value.replace(/\D/g, '');
-  const dropdown = document.getElementById('country_code');
-  if (!dropdown) return value;
+  const hiddenInput = document.getElementById('country_code_hidden');
+  const trigger = document.getElementById('pf-country-trigger');
+  const listItems = document.querySelectorAll('#country_code_list li');
+  
+  if (!hiddenInput || !listItems.length) return value;
+
+  const selectLi = (li) => {
+    hiddenInput.value = li.dataset.code;
+    hiddenInput.dataset.cca2 = li.dataset.cca2;
+    trigger.innerText = `${li.dataset.flag} ${li.dataset.code}`;
+    localStorage.setItem('pf_last_country_cca2', li.dataset.cca2);
+  };
 
   // 1. If user typed a '+' prefix, detect country, update dropdown, and STRIP the prefix from `digits`
   if (value.trim().startsWith('+') && digits.length > 0) {
     const possibleCodes = [digits.substring(0, 3), digits.substring(0, 2), digits.substring(0, 1)].filter(Boolean);
     for (let code of possibleCodes) {
       let matched = false;
-      for (let i = 0; i < dropdown.options.length; i++) {
-        if (dropdown.options[i].value === `+${code}` && dropdown.options[i].dataset.cca2) {
-          dropdown.selectedIndex = i;
-          dropdown.dispatchEvent(new Event('change', { bubbles: true }));
+      for (let li of listItems) {
+        if (li.dataset.code === `+${code}`) {
+          selectLi(li);
           matched = true;
           break;
         }
@@ -500,12 +533,10 @@ function formatPhoneAndSyncDropdown(value) {
       const isCanada = CANADIAN_AREA_CODES.includes(areaCode);
       const targetCca2 = isCanada ? 'CA' : 'US';
       
-      const currentOpt = dropdown.options[dropdown.selectedIndex];
-      if (!currentOpt || currentOpt.dataset.cca2 !== targetCca2) {
-        for (let i = 0; i < dropdown.options.length; i++) {
-          if (dropdown.options[i].dataset.cca2 === targetCca2) {
-            dropdown.selectedIndex = i;
-            dropdown.dispatchEvent(new Event('change', { bubbles: true }));
+      if (hiddenInput.dataset.cca2 !== targetCca2) {
+        for (let li of listItems) {
+          if (li.dataset.cca2 === targetCca2) {
+            selectLi(li);
             break;
           }
         }
@@ -514,7 +545,7 @@ function formatPhoneAndSyncDropdown(value) {
   }
 
   // Determine if the selected country uses NANP (North American Numbering Plan)
-  const isNanp = dropdown.options[dropdown.selectedIndex]?.value === '+1';
+  const isNanp = hiddenInput.value === '+1';
 
   // 3. Format the remaining local digits
   if (isNanp && digits.length === 10) {
