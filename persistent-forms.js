@@ -345,11 +345,20 @@ async function populateCountryDropdown() {
       }
     }
     
+    const dataList = document.getElementById('pf_country_list');
+    if (dataList) dataList.innerHTML = '';
+
     options.forEach(o => {
       const opt = new Option(`${o.flag} ${o.code} (${o.name})`, o.code);
       opt.dataset.cca2 = o.cca2;
       opt.dataset.name = o.name;
       dropdown.add(opt);
+
+      if (dataList) {
+        const dlOpt = document.createElement('option');
+        dlOpt.value = o.name;
+        dataList.appendChild(dlOpt);
+      }
     });
 
     dropdown.addEventListener('change', (e) => {

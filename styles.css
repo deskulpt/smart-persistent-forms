@@ -502,6 +502,16 @@ body {
   flex-shrink: 0;
 }
 
+.pf-cookie-actions .pf-btn-primary,
+.pf-cookie-actions .pf-btn-secondary {
+  margin-top: 0;
+  width: auto;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* WCAG Accessibility Focus */
 .pf-phone-wrapper:has(:focus-visible) {
   outline: 3px solid var(--pf-primary-light);
