@@ -8,6 +8,8 @@
   [![Size: Lightweight](https://img.shields.io/badge/Size-Lightweight-brightgreen.svg)](#)
 </div>
 
+![Persistent Forms UI](assets/ui-preview.png)
+
 <hr/>
 
 ## 🚀 Why Smart Persistent Forms?
@@ -18,15 +20,18 @@ Sure, your AI might casually generate bare-bones HTML forms, or you could pay a 
 
 Just drop in the script, add `data-persist="true"` to your inputs, and you instantly get local data persistence, smart URL formatting, and intelligent phone number styling.
 
-## ✨ Features & Benefits
+## ✨ Features Optimized for CRO (Conversion Rate Optimization)
 
-| Feature | Advantage | Benefit | Plug & Play Instructions |
-| :--- | :--- | :--- | :--- |
-| **💾 Input Persistence** | Saves form data directly to the user's browser `localStorage` in real-time. | Users never lose their typed information if they accidentally close the tab, refresh the page, or navigate away. | Add `data-persist="true"` to any `<input>`, `<textarea>`, or `<select>`. |
-| **🌐 Protocol Prefilling** | Automatically prepends `https://` to URLs upon input blur. | Prevents form submission errors for invalid URLs without disrupting the user while they are actively typing. | Use `<input type="url" data-persist="true">`. |
-| **📞 Smart Phone Formatting** | Detects and formats North American phone numbers to the standard `(555) 555-5555`. | Ensures clean, standardized data in your backend while providing a polished experience for the user. | Use `<input type="tel" data-persist="true">`. |
-| **🌍 Phone Geolocation** | Integrates with IP geolocation to auto-detect the user's country code. | Reduces friction by pre-selecting the correct country prefix based on the user's location. | Include an element with `id="country-badge"` next to your phone input. |
-| **💅 Premium CSS UI** | Ready-to-use glassmorphism styling based on the premium Deskulpt design system. | Saves hours of CSS tweaking and provides a modern, cohesive look right out of the box. | Include `styles.css` and add the `.pf-input` class to your elements. |
+Every millisecond of friction costs you leads and sales. We built this form engine specifically to eliminate the invisible barriers that cause users to abandon forms.
+
+| Feature | CRO Advantage | Plug & Play Instructions |
+| :--- | :--- | :--- |
+| **💾 Zero Friction Data Retention** | Drafts save to `localStorage` in real-time. If a user accidentally closes the tab or refreshes, they don't have to start over, preserving hard-earned conversions. | Add `data-persist="true"` to any `<input>`, `<textarea>`, or `<select>`. |
+| **⚡️ Lightning Fast Country Selection** | A custom combobox with semantic search. Users type "Uni" and jump straight to the United States. Eliminates the friction of scrolling through 200+ countries. | Included automatically in the country code logic. |
+| **📱 Mobile-Optimized Numeric Keypads** | Triggers the large, easy-to-tap numeric dialpad on smartphones automatically, dramatically speeding up data entry for mobile traffic. | Use `<input type="tel" data-persist="true">`. |
+| **🌐 Silent Protocol Correction** | Users type `apple.com` and the script asynchronously pings and prepends `https://`. Prevents harsh validation errors from blocking submissions. | Use `<input type="url" data-persist="true">`. |
+| **🤝 Cross-Form Synergy** | Fills identical fields across multiple forms automatically. If they gave their email on page 1, page 2 already has it. Accelerates checkout and lead gen. | Handled automatically by the persistent storage keys. |
+| **💅 High-Trust Aesthetics** | Ships with a premium, responsive glassmorphism UI. Professional, high-quality design increases perceived trust, a critical psychological factor for conversion. | Include `styles.css` and use the `.pf-input` classes. |
 
 > **Note on Global Phone Formatting:** For accurate detection of local area codes *outside* North America, you can integrate [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It provides massive global coverage but comes with an increased bundle size.
 
