@@ -4,13 +4,17 @@ A lightweight, zero-dependency vanilla JavaScript library for frictionless web f
 
 Powered by a premium glassmorphism CSS UI based on the Deskulpt design system.
 
-## Features
+## Features & Benefits
 
-1. **Input Persistence**: Never lose user input to a page refresh again. Inputs are synced to `localStorage` and automatically hydrated when the user returns.
-2. **Protocol Prefilling**: When users type a website domain (e.g. `example.com`), it is automatically prefixed with `https://` on blur, preventing invalid URL submission errors without annoying the user while typing.
-3. **Smart Phone Formatting**: Automatically detects North American area codes, strips country codes if provided in the dropdown, and formats the local number (e.g. `(555) 555-5555`) upon input blur.
-   - **The Heavy Option (Global Detection):** If you require accurate detection of local area codes for countries outside of North America, you can adopt [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It will accurately detect global area codes (like knowing `647` is Canada) and instantly swap the badge to the correct flag. However, note that this library contains a massive global database and will cause your script to take slightly longer to load.
-4. **Premium CSS UI**: A beautiful, dark-mode glassmorphism design system for modern web apps included out-of-the-box.
+| Feature | Advantage | Benefit | Plug & Play Instructions |
+| :--- | :--- | :--- | :--- |
+| **Input Persistence** | Saves form data directly to the user's browser `localStorage` in real-time. | Users never lose their typed information if they accidentally close the tab, refresh the page, or navigate away. | Add `data-persist="true"` to any `<input>`, `<textarea>`, or `<select>`. The script handles the rest automatically. |
+| **Protocol Prefilling** | Automatically prepends `https://` to URLs upon input blur, avoiding typing disruptions. | Prevents form submission errors for invalid URLs without annoying the user while they are actively typing. | Use `<input type="url">` and add the `data-persist="true"` attribute. |
+| **Smart Phone Formatting** | Detects and formats North American phone numbers to the standard `(555) 555-5555` format. | Ensures clean, standardized data in your backend while providing a polished experience for the user. | Use `<input type="tel">` and add the `data-persist="true"` attribute. |
+| **Phone Geolocation** | Integrates with IP geolocation to auto-detect the user's country and updates the country code badge. | Reduces friction by pre-selecting the correct country prefix based on the user's IP address. | Include an element with `id="country-badge"` next to your phone input. It updates automatically. |
+| **Premium CSS UI** | Ready-to-use glassmorphism styling based on the premium Deskulpt design system. | Saves hours of styling time and provides a modern, cohesive look and feel out of the box. | Include `styles.css` and use the `.pf-input` class on your form elements. |
+
+*Note on Global Phone Formatting:* If you require accurate detection of local area codes for countries outside of North America, you can adopt [libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js). It accurately detects global area codes and instantly swaps the badge to the correct flag. However, note that this library contains a massive global database and will increase load times.
 
 ## Usage (Vanilla HTML)
 
