@@ -8,7 +8,7 @@
   [![Size: Lightweight](https://img.shields.io/badge/Size-Lightweight-brightgreen.svg)](#)
 </div>
 
-![Persistent Forms UI](assets/ui-preview.png)
+
 
 <hr/>
 
